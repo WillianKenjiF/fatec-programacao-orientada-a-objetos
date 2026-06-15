@@ -27,9 +27,19 @@ public class GuiMenuOpcoes extends javax.swing.JFrame {
         jMenuCadastro.setText("Cadastro");
 
         jMenuItemHotel.setText("Hotel");
+        jMenuItemHotel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemHotelActionPerformed(evt);
+            }
+        });
         jMenuCadastro.add(jMenuItemHotel);
 
         jMenuItemReserva.setText("Reserva");
+        jMenuItemReserva.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemReservaActionPerformed(evt);
+            }
+        });
         jMenuCadastro.add(jMenuItemReserva);
 
         jMenuBar1.add(jMenuCadastro);
@@ -49,6 +59,14 @@ public class GuiMenuOpcoes extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jMenuItemHotelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemHotelActionPerformed
+        new GuiCadastroHotel().setVisible(true);
+    }//GEN-LAST:event_jMenuItemHotelActionPerformed
+
+    private void jMenuItemReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemReservaActionPerformed
+        new GuiCadastroReservas().setVisible(true);
+    }//GEN-LAST:event_jMenuItemReservaActionPerformed
 
     /**
      * @param args the command line arguments
