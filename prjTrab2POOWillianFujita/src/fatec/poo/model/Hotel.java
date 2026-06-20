@@ -1,3 +1,4 @@
+
 package fatec.poo.model;
 
 import java.util.ArrayList;
@@ -11,8 +12,8 @@ public class Hotel {
     private String nome;
     private String endereco;
     private String telefone;
-    private Double valorDiaria;
-    private Double totalFaturamento;
+    private double valorDiaria;
+    private double totalFaturamento;
     private ArrayList<Reserva> reservas;
     
     public Hotel(int codigo, String nome) {

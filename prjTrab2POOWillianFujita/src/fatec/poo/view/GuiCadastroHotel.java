@@ -1,5 +1,11 @@
 package fatec.poo.view;
 
+import fatec.poo.model.Hotel;
+import fatec.poo.control.PreparaConexao;
+import fatec.poo.control.DaoHotel;
+import java.text.DecimalFormat;
+import javax.swing.JOptionPane;
+
 /**
  * @author Willian Kenji
  */
@@ -7,13 +13,41 @@ public class GuiCadastroHotel extends javax.swing.JFrame {
 
     public GuiCadastroHotel() {
         initComponents();
+        limparCampos();
+    }
+    
+    DecimalFormat df = new DecimalFormat("#,##0.00");
+    
+    private void limparCampos() {
+        // Limpa todos os textos
+        txtCodigo.setText("");
+        txtNome.setText("");
+        txtEndereco.setText("");
+        txtTelefone.setText("");
+        txtValDiaria.setText("");
+        txtFaturamento.setText("");
+        
+        // Bloqueia os campos para edição
+        txtNome.setEnabled(false);
+        txtEndereco.setEnabled(false);
+        txtTelefone.setEnabled(false);
+        txtValDiaria.setEnabled(false);
+        txtFaturamento.setEnabled(false);
+        
+        // Desabilita dos botões
+        btnIncluir.setEnabled(false);
+        btnAlterar.setEnabled(false);
+        btnExcluir.setEnabled(false);
+        
+        // Habilita o texto e foca no campo para digitar o código
+        txtCodigo.setEnabled(true);
+        txtCodigo.requestFocus();
     }
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        txtNome1 = new javax.swing.JTextField();
         lblCodigo = new javax.swing.JLabel();
         lblNome = new javax.swing.JLabel();
         lblEndereco = new javax.swing.JLabel();
@@ -34,6 +68,14 @@ public class GuiCadastroHotel extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Cadastro Hotel");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         lblCodigo.setText("Código");
 
@@ -50,14 +92,39 @@ public class GuiCadastroHotel extends javax.swing.JFrame {
         txtFaturamento.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         btnConsultar.setText("Consultar");
+        btnConsultar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConsultarActionPerformed(evt);
+            }
+        });
 
         btnIncluir.setText("Incluir");
+        btnIncluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIncluirActionPerformed(evt);
+            }
+        });
 
         btnAlterar.setText("Alterar");
+        btnAlterar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlterarActionPerformed(evt);
+            }
+        });
 
         btnExcluir.setText("Excluir");
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
 
         btnSair.setText("Sair");
+        btnSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSairActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -138,6 +205,136 @@ public class GuiCadastroHotel extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarActionPerformed
+        try{
+            // Valida se o campo Codigo não está vazio antes de converter
+            if (txtCodigo.getText().trim().isEmpty()){
+                JOptionPane.showMessageDialog(this, "Por favor, digite um código para consultar.");
+                return;
+            }
+            
+            int codigo = Integer.parseInt(txtCodigo.getText());
+            Hotel objHotel = daoHotel.consultar(codigo);
+            
+            if (objHotel == null) {
+                JOptionPane.showMessageDialog(this, "Hotel não encontrado! " +
+                                                    "Os campos foram liberados para um novo cadastro.");
+                // Limpa os campo caso tenham algum conteúdo
+                txtNome.setText("");
+                txtEndereco.setText("");
+                txtTelefone.setText("");
+                txtValDiaria.setText("");
+                txtFaturamento.setText("");
+                
+                // Habilita a inserção de textos
+                txtNome.setEnabled(true);
+                txtEndereco.setEnabled(true);
+                txtTelefone.setEnabled(true);
+                txtValDiaria.setEnabled(true);
+                btnIncluir.setEnabled(true);
+                btnAlterar.setEnabled(false);
+                btnExcluir.setEnabled(false);
+            } else {
+                txtNome.setText(objHotel.getNome());
+                txtEndereco.setText(objHotel.getEndereco());
+                txtTelefone.setText(objHotel.getTelefone());
+                txtValDiaria.setText(String.valueOf(objHotel.getValorDiaria()));
+                txtFaturamento.setText(df.format(objHotel.getTotalFaturamento()));
+                
+                txtNome.setEnabled(true);
+                txtEndereco.setEnabled(true);
+                txtTelefone.setEnabled(true);
+                txtValDiaria.setEnabled(true);
+                btnIncluir.setEnabled(false);
+                btnAlterar.setEnabled(true);
+                btnExcluir.setEnabled(true);
+            }
+        } catch (NumberFormatException ex) {
+            // Captura o erro caso o usuário digite letras no campo de código
+            JOptionPane.showMessageDialog(this, "O código deve ser um número inteiro válido!");
+        } catch (Exception ex) {
+            // Captura qualquer outro erro
+            JOptionPane.showMessageDialog(this, "Erro inesperado ao realizar consulta: " + ex.getMessage());
+        }
+    }//GEN-LAST:event_btnConsultarActionPerformed
+
+    private void btnIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirActionPerformed
+        try{
+            // Validação inicial para verificar se os textos mão estão vazios
+            if(txtCodigo.getText().trim().isEmpty() || txtNome.getText().trim().isEmpty() || 
+                                                       txtValDiaria.getText().trim().isEmpty()){
+                JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos obrigatórios");
+                return;
+            }
+            objHotel = new Hotel (Integer.parseInt(txtCodigo.getText().trim()), txtNome.getText().trim());
+            objHotel.setEndereco(txtEndereco.getText().trim());
+            objHotel.setTelefone(txtTelefone.getText().trim());
+            objHotel.setValorDiaria(Double.parseDouble(txtValDiaria.getText().trim()));
+
+            daoHotel.inserir(objHotel);
+            JOptionPane.showMessageDialog(this, "Hotel incluído com sucesso!");
+            limparCampos();
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Erro nos dados numéricos!");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao tentar salvar o hotel: " + ex.getMessage());
+        }
+    }//GEN-LAST:event_btnIncluirActionPerformed
+
+    private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
+        try{
+            if (txtCodigo.getText().trim().isEmpty() || txtNome.getText().trim().isEmpty()){
+                JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos obrigatórios");
+                return;
+            }
+            Hotel objHot = new Hotel(Integer.parseInt(txtCodigo.getText().trim()), txtNome.getText().trim());
+            objHot.setEndereco(txtEndereco.getText().trim());
+            objHot.setTelefone(txtTelefone.getText().trim());
+            objHot.setValorDiaria(Double.parseDouble(txtValDiaria.getText().trim()));
+
+            daoHotel.alterar(objHot);
+            JOptionPane.showMessageDialog(this, "Hotel alterado com sucesso!");
+            limparCampos();
+        } catch(NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Erro nos dados numéricos!");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao tentar salvar o hotel: " + ex.getMessage());
+        }
+    }//GEN-LAST:event_btnAlterarActionPerformed
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        try{
+            if (txtCodigo.getText().trim().isEmpty() || txtNome.getText().trim().isEmpty()){
+                JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos obrigatórios");
+                return;
+            }
+            Hotel objHot = new Hotel(Integer.parseInt(txtCodigo.getText()), txtNome.getText());
+
+            daoHotel.excluir(objHot);
+            JOptionPane.showMessageDialog(this, "Hotel excluído com sucesso!");
+            limparCampos();
+        } catch (NumberFormatException ex){
+            JOptionPane.showMessageDialog(this, "Erro nos dados numéricos!");
+        } catch (Exception ex){
+            JOptionPane.showMessageDialog(this, "Erro ao tentar salvar o hotel: " + ex.getMessage());
+        }
+    }//GEN-LAST:event_btnExcluirActionPerformed
+
+    private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
+        dispose();
+    }//GEN-LAST:event_btnSairActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        prepCon = new PreparaConexao ("FATEC_POO", "0311");
+        prepCon.setConnectionString("oracle.jdbc.driver.OracleDriver");
+        prepCon.setDriver("jdbc:oracle:thin:@192.168.1.6:1521:xe");
+        daoHotel = new DaoHotel (prepCon.abrirConexao());
+    }//GEN-LAST:event_formWindowOpened
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        prepCon.fecharConexao();
+    }//GEN-LAST:event_formWindowClosed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAlterar;
     private javax.swing.JButton btnConsultar;
@@ -154,8 +351,10 @@ public class GuiCadastroHotel extends javax.swing.JFrame {
     private javax.swing.JTextField txtEndereco;
     private javax.swing.JTextField txtFaturamento;
     private javax.swing.JTextField txtNome;
-    private javax.swing.JTextField txtNome1;
     private javax.swing.JTextField txtTelefone;
     private javax.swing.JTextField txtValDiaria;
     // End of variables declaration//GEN-END:variables
+    PreparaConexao prepCon;
+    Hotel objHotel;
+    DaoHotel daoHotel;
 }
