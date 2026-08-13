@@ -33,6 +33,7 @@ public class DaoHotel {
                 objHotel.setEndereco(rs.getString("Endereco_Hot"));
                 objHotel.setTelefone(rs.getString("Telefone_Hot"));
                 objHotel.setValorDiaria(rs.getDouble("ValorDiaria_Hot"));
+                objHotel.setTotalFaturamento(rs.getDouble("TotalFaturamento_Hot"));
             }
         }
         catch (SQLException ex) {

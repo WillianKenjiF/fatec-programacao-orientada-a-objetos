@@ -325,10 +325,10 @@ public class GuiCadastroHotel extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSairActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        prepCon = new PreparaConexao ("FATEC_POO", "0311");
-        prepCon.setConnectionString("oracle.jdbc.driver.OracleDriver");
-        prepCon.setDriver("jdbc:oracle:thin:@192.168.1.6:1521:xe");
-        daoHotel = new DaoHotel (prepCon.abrirConexao());
+        prepCon = new PreparaConexao("fatec_poo","0311");
+        prepCon.setDriver("oracle.jdbc.driver.OracleDriver");
+        prepCon.setConnectionString("jdbc:oracle:thin:@127.0.0.1:1521:xe");
+        daoHotel = new DaoHotel(prepCon.abrirConexao());
     }//GEN-LAST:event_formWindowOpened
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed

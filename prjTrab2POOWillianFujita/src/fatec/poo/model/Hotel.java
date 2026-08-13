@@ -37,6 +37,10 @@ public class Hotel {
     public void setValorDiaria(double valorDiaria) {
         this.valorDiaria = valorDiaria;
     }
+    
+    public void setTotalFaturamento(double totalFaturamento) {
+        this.totalFaturamento = totalFaturamento;
+    }
 
     public int getCodigo() {
         return codigo;

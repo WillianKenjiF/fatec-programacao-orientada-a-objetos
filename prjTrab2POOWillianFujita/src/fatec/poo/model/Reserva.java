@@ -45,6 +45,11 @@ public class Reserva {
         return valorHosped;
     }
     
+    public void carregarEncerramento(Data dataSaida, double valorHosped){
+        this.dataSaida = dataSaida;
+        this.valorHosped = valorHosped;
+    }
+    
     public Hotel getHotel(){
         return hotel;
     }

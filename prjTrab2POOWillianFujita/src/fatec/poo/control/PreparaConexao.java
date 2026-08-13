@@ -33,7 +33,6 @@ public class PreparaConexao {
         this.driver = driver;
     }
     
-    // 
     public Connection abrirConexao(){
         if (connection == null){ // Verifique se ainda não existe uma conexão criada
             try{
